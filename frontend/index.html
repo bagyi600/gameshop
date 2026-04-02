@@ -30,6 +30,14 @@
             --accent-red: #ef4444;
             --accent-yellow: #fbbf24;
             --accent-pink: #ec4899;
+            --mlbb-color: #1e88e5;
+            --mlbb-gradient: linear-gradient(135deg, #1e88e5, #0d47a1);
+            --pubg-color: #f5a623;
+            --pubg-gradient: linear-gradient(135deg, #f5a623, #d4740a);
+            --freefire-color: #ff5722;
+            --freefire-gradient: linear-gradient(135deg, #ff5722, #e64a19);
+            --valorant-color: #ff4655;
+            --valorant-gradient: linear-gradient(135deg, #ff4655, #d32f2f);
             --text-primary: #ffffff;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
@@ -134,7 +142,7 @@
             right: 0;
             z-index: 1000;
             padding: 0 24px;
-            background: rgba(5, 5, 16, 0.85);
+            background: rgba(5, 5, 16, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
         }
@@ -298,10 +306,22 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            text-align: center;
             padding: 120px 24px 80px;
             position: relative;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text {
+            animation: fadeInUp 0.8s ease;
         }
 
         .hero-badge {
@@ -315,7 +335,6 @@
             font-size: 0.9rem;
             color: var(--accent-orange);
             margin-bottom: 30px;
-            animation: fadeInDown 0.8s ease;
         }
 
         .hero-badge .pulse {
@@ -333,7 +352,6 @@
 
         .hero h1 {
             margin-bottom: 24px;
-            animation: fadeInUp 0.8s ease;
         }
 
         .hero h1 .gradient {
@@ -353,28 +371,25 @@
         .hero-subtitle {
             font-size: clamp(1rem, 2.5vw, 1.3rem);
             color: var(--text-secondary);
-            max-width: 600px;
+            max-width: 500px;
             margin-bottom: 40px;
-            animation: fadeInUp 0.8s ease 0.2s both;
+            line-height: 1.7;
         }
 
         .hero-buttons {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeInUp 0.8s ease 0.4s both;
         }
 
         .hero-stats {
             display: flex;
             gap: 40px;
-            margin-top: 60px;
-            animation: fadeInUp 0.8s ease 0.6s both;
+            margin-top: 50px;
         }
 
         .stat-item {
-            text-align: center;
+            text-align: left;
         }
 
         .stat-number {
@@ -393,9 +408,74 @@
             letter-spacing: 0.1em;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Hero Game Showcase */
+        .hero-showcase {
+            position: relative;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .game-showcase-card {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 16/10;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .game-showcase-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-showcase-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        }
+
+        .game-showcase-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .game-showcase-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .game-selector {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .game-selector-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .game-selector-btn:hover,
+        .game-selector-btn.active {
+            border-color: var(--accent-cyan);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
 
         @keyframes fadeInUp {
@@ -467,18 +547,6 @@
             overflow: hidden;
         }
 
-        .game-tab::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent, transparent);
-            transition: all 0.3s ease;
-            z-index: 0;
-        }
-
         .game-tab:hover {
             border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
@@ -492,25 +560,70 @@
         }
 
         .game-tab .icon {
-            font-size: 1.8rem;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
-        .game-tab.active .icon,
-        .game-tab:hover .icon {
-            filter: grayscale(0%);
+        .game-tab.active .icon {
+            background: rgba(255, 107, 53, 0.2);
         }
 
-        .game-tab span {
+        /* Game Header Image */
+        .game-header {
             position: relative;
-            z-index: 1;
+            width: 100%;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 40px;
+            display: none;
+        }
+
+        .game-header.active {
+            display: block;
+        }
+
+        .game-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-header-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(5, 5, 16, 0.9) 0%, rgba(5, 5, 16, 0.5) 50%, transparent 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .game-header-info {
+            max-width: 400px;
+        }
+
+        .game-header-info h3 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .game-header-info p {
+            color: var(--text-secondary);
+            font-size: 1rem;
         }
 
         /* Products Grid */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 24px;
         }
 
@@ -518,9 +631,8 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            padding: 24px;
-            position: relative;
             overflow: hidden;
+            position: relative;
             transition: all 0.4s ease;
         }
 
@@ -549,23 +661,62 @@
 
         .product-card.featured {
             border-color: rgba(255, 107, 53, 0.3);
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 107, 53, 0.02));
         }
 
         .product-card.featured::before {
             opacity: 1;
         }
 
+        /* Product Image */
+        .product-image {
+            width: 100%;
+            height: 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        /* Game-specific gradients */
+        .product-image.mlbb {
+            background: linear-gradient(135deg, #1e88e5, #0d47a1);
+        }
+
+        .product-image.pubg {
+            background: linear-gradient(135deg, #f5a623, #d4740a);
+        }
+
+        .product-image.freefire {
+            background: linear-gradient(135deg, #ff5722, #e64a19);
+        }
+
+        .product-image.valorant {
+            background: linear-gradient(135deg, #ff4655, #d32f2f);
+        }
+
         .featured-badge {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 12px;
+            right: 12px;
             background: linear-gradient(135deg, var(--accent-orange), #ff8f4a);
             color: white;
             font-family: 'Rajdhani', sans-serif;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -573,26 +724,30 @@
             animation: pulse 2s infinite;
         }
 
+        .product-content {
+            padding: 20px;
+        }
+
         .product-game {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .product-game .icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .product-game .name {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -601,29 +756,30 @@
 
         .product-name {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--text-primary);
         }
 
         .product-description {
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            line-height: 1.4;
         }
 
         .product-price {
             display: flex;
             align-items: baseline;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
         }
 
         .price-current {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
             -webkit-background-clip: text;
@@ -631,27 +787,25 @@
         }
 
         .price-original {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-muted);
             text-decoration: line-through;
         }
 
         .price-save {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--accent-green);
             background: rgba(16, 185, 129, 0.1);
-            padding: 4px 10px;
+            padding: 3px 10px;
             border-radius: 20px;
             font-weight: 600;
         }
 
         .product-buy {
             width: 100%;
-            padding: 16px;
-            font-size: 1rem;
+            padding: 14px;
+            font-size: 0.95rem;
             font-weight: 700;
-            position: relative;
-            overflow: hidden;
         }
 
         /* Trust Section */
@@ -696,6 +850,12 @@
             justify-content: center;
             font-size: 2.5rem;
             position: relative;
+        }
+
+        .trust-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
 
         .trust-icon::after {
@@ -1027,6 +1187,31 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text {
+                order: 1;
+            }
+
+            .hero-showcase {
+                order: 2;
+                display: flex;
+                justify-content: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -1122,32 +1307,48 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-badge">
-            <span class="pulse"></span>
-            <span>⚡ Instant Delivery - No Registration Required</span>
-        </div>
-        <h1>Level Up Your Gaming<br><span class="gradient">Instant Top-Up</span></h1>
-        <p class="hero-subtitle">The fastest way to get diamonds, UC, and VP for your favorite games. Secure payments, instant delivery, 24/7 support.</p>
-        <div class="hero-buttons">
-            <button class="btn btn-primary" onclick="scrollToGames()">
-                <span>🎮 Browse Games</span>
-            </button>
-            <button class="btn btn-secondary" onclick="showModal('register')">
-                <span>✨ Create Account</span>
-            </button>
-        </div>
-        <div class="hero-stats">
-            <div class="stat-item">
-                <div class="stat-number">50K+</div>
-                <div class="stat-label">Orders Completed</div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">
+                    <span class="pulse"></span>
+                    <span>⚡ Instant Delivery - No Registration Required</span>
+                </div>
+                <h1>Level Up Your Gaming<br><span class="gradient">Instant Top-Up</span></h1>
+                <p class="hero-subtitle">The fastest way to get diamonds, UC, and VP for your favorite games. Secure payments, instant delivery, 24/7 support.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToGames()">
+                        <span>🎮 Browse Games</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="showModal('register')">
+                        <span>✨ Create Account</span>
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Orders Completed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">4.9★</div>
+                        <div class="stat-label">User Rating</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Support Online</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">4.9★</div>
-                <div class="stat-label">User Rating</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">24/7</div>
-                <div class="stat-label">Support Online</div>
+            <div class="hero-showcase">
+                <div class="game-showcase-card" id="heroShowcase">
+                    <img id="heroImage" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80" alt="Game Preview" onerror="this.style.display='none'">
+                    <div class="game-showcase-overlay">
+                        <h3 class="game-showcase-title" id="heroTitle">Mobile Legends</h3>
+                        <p class="game-showcase-desc" id="heroDesc">Get diamonds instantly for your account</p>
+                    </div>
+                </div>
+                <div class="game-selector" id="gameSelector">
+                    <!-- Populated by JS -->
+                </div>
             </div>
         </div>
     </section>
@@ -1197,6 +1398,11 @@
             <!-- Populated by JS -->
         </div>
 
+        <!-- Game Header Images -->
+        <div id="gameHeaders">
+            <!-- Populated by JS -->
+        </div>
+
         <div class="products-grid" id="productsGrid">
             <!-- Populated by JS -->
         </div>
@@ -1242,10 +1448,10 @@
                 <div class="footer-section">
                     <h4>Games</h4>
                     <ul>
-                        <li><a href="#">Mobile Legends</a></li>
-                        <li><a href="#">PUBG Mobile</a></li>
-                        <li><a href="#">Free Fire</a></li>
-                        <li><a href="#">Valorant</a></li>
+                        <li><a href="#" onclick="selectGame('mlbb')">Mobile Legends</a></li>
+                        <li><a href="#" onclick="selectGame('pubg')">PUBG Mobile</a></li>
+                        <li><a href="#" onclick="selectGame('freefire')">Free Fire</a></li>
+                        <li><a href="#" onclick="selectGame('valorant')">Valorant</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -1288,7 +1494,7 @@
             <div class="modal-product-info" id="modalProductInfo">
                 <div>
                     <div class="modal-product-name" id="modalProductName">50 + 5 Diamonds</div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted);">Mobile Legends</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);" id="modalGameName">Mobile Legends</div>
                 </div>
                 <div class="modal-product-price" id="modalProductPrice">$1.29</div>
             </div>
@@ -1316,12 +1522,44 @@
         // API Configuration
         const API_URL = '/api';
         
-        // Games data
+        // Games data with images
         const games = [
-            { id: 'mlbb', name: 'Mobile Legends', icon: '🎮', color: '#00F0FF' },
-            { id: 'pubg', name: 'PUBG Mobile', icon: '🔫', color: '#FF6B3D' },
-            { id: 'freefire', name: 'Free Fire', icon: '🔥', color: '#A855F7' },
-            { id: 'valorant', name: 'Valorant', icon: '🎯', color: '#FF4655' },
+            { 
+                id: 'mlbb', 
+                name: 'Mobile Legends', 
+                icon: '🎮',
+                color: '#1e88e5',
+                gradient: 'linear-gradient(135deg, #1e88e5, #0d47a1)',
+                heroImage: 'https://images.unsplash.com/photo-1511512578047-dfb367043420?w=800&q=80',
+                description: 'Get diamonds and starlight instantly'
+            },
+            { 
+                id: 'pubg', 
+                name: 'PUBG Mobile', 
+                icon: '🔫',
+                color: '#f5a623',
+                gradient: 'linear-gradient(135deg, #f5a623, #d4740a)',
+                heroImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80',
+                description: 'Top up UC for exclusive items'
+            },
+            { 
+                id: 'freefire', 
+                name: 'Free Fire', 
+                icon: '🔥',
+                color: '#ff5722',
+                gradient: 'linear-gradient(135deg, #ff5722, #e64a19)',
+                heroImage: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=800&q=80',
+                description: 'Diamonds for characters and skins'
+            },
+            { 
+                id: 'valorant', 
+                name: 'Valorant', 
+                icon: '🎯',
+                color: '#ff4655',
+                gradient: 'linear-gradient(135deg, #ff4655, #d32f2f)',
+                heroImage: 'https://images.unsplash.com/photo-1552826527-29a615d61c2a?w=800&q=80',
+                description: 'VP for weapon skins and battle pass'
+            },
         ];
 
         // State
@@ -1334,6 +1572,8 @@
             createParticles();
             createTicker();
             renderGameTabs();
+            renderGameSelector();
+            renderGameHeaders();
             fetchProducts();
             initScrollAnimations();
         });
@@ -1355,8 +1595,8 @@
 
         // Create live orders ticker
         function createTicker() {
-            const names = ['John', 'Alex', 'Mike', 'Sarah', 'David', 'Emma', 'Chris', 'Lisa'];
-            const games = ['MLBB', 'PUBG', 'Free Fire', 'Valorant'];
+            const names = ['John', 'Alex', 'Mike', 'Sarah', 'David', 'Emma', 'Chris', 'Lisa', 'Ahmad', 'Wei', 'Yuki', 'Kim'];
+            const gameNames = ['Mobile Legends', 'PUBG', 'Free Fire', 'Valorant'];
             const items = ['100 Diamonds', '500 UC', '1000 Diamonds', '2050 VP', 'Starlight Pass', 'Royal Pass'];
             
             const container = document.getElementById('ticker');
@@ -1364,7 +1604,7 @@
             
             for (let i = 0; i < 10; i++) {
                 const name = names[Math.floor(Math.random() * names.length)];
-                const game = games[Math.floor(Math.random() * games.length)];
+                const game = gameNames[Math.floor(Math.random() * gameNames.length)];
                 const item = items[Math.floor(Math.random() * items.length)];
                 const time = Math.floor(Math.random() * 10) + 1;
                 html += `
@@ -1377,7 +1617,35 @@
                 `;
             }
             
-            container.innerHTML = html + html; // Duplicate for seamless loop
+            container.innerHTML = html + html;
+        }
+
+        // Render game selector in hero
+        function renderGameSelector() {
+            const container = document.getElementById('gameSelector');
+            container.innerHTML = games.map(game => `
+                <button class="game-selector-btn ${game.id === selectedGame ? 'active' : ''}" 
+                        onclick="selectGame('${game.id}')"
+                        style="background: ${game.id === selectedGame ? game.gradient : 'var(--bg-card)'}">
+                    ${game.icon}
+                </button>
+            `).join('');
+        }
+
+        // Render game headers
+        function renderGameHeaders() {
+            const container = document.getElementById('gameHeaders');
+            container.innerHTML = games.map(game => `
+                <div class="game-header ${game.id === selectedGame ? 'active' : ''}" id="header-${game.id}">
+                    <img src="${game.heroImage}" alt="${game.name}" onerror="this.style.display='none'">
+                    <div class="game-header-overlay">
+                        <div class="game-header-info">
+                            <h3>${game.icon} ${game.name}</h3>
+                            <p>${game.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Scroll animations
@@ -1400,7 +1668,8 @@
             const container = document.getElementById('gamesTabs');
             container.innerHTML = games.map(game => `
                 <button class="game-tab ${game.id === selectedGame ? 'active' : ''}" 
-                        onclick="selectGame('${game.id}')">
+                        onclick="selectGame('${game.id}')"
+                        style="--game-color: ${game.color}">
                     <span class="icon">${game.icon}</span>
                     <span>${game.name}</span>
                 </button>
@@ -1411,7 +1680,28 @@
         function selectGame(gameId) {
             selectedGame = gameId;
             renderGameTabs();
+            renderGameSelector();
+            renderGameHeaders();
+            
+            // Update hero image
+            const game = games.find(g => g.id === gameId);
+            if (game) {
+                document.getElementById('heroImage').src = game.heroImage;
+                document.getElementById('heroTitle').textContent = game.name;
+                document.getElementById('heroDesc').textContent = game.description;
+            }
+            
             fetchProducts();
+        }
+
+        // Update hero on load
+        function updateHero() {
+            const game = games.find(g => g.id === selectedGame);
+            if (game) {
+                document.getElementById('heroImage').src = game.heroImage;
+                document.getElementById('heroTitle').textContent = game.name;
+                document.getElementById('heroDesc').textContent = game.description;
+            }
         }
 
         // Fetch products from API
@@ -1471,23 +1761,38 @@
                     ? Math.round((1 - product.price / product.original_price) * 100) 
                     : 0;
                 
+                // Currency icons based on game
+                const currencyIcons = {
+                    mlbb: '💎',
+                    pubg: '🪙',
+                    freefire: '💎',
+                    valorant: '⭐'
+                };
+                
                 return `
                     <div class="product-card ${product.featured ? 'featured' : ''} animate-on-scroll">
-                        ${product.featured ? '<span class="featured-badge">🔥 HOT DEAL</span>' : ''}
-                        <div class="product-game">
-                            <span class="icon">${gameInfo?.icon || '🎮'}</span>
-                            <span class="name">${gameInfo?.name || 'Game'}</span>
+                        <div class="product-image ${selectedGame}">
+                            <div class="product-image-placeholder">
+                                ${currencyIcons[selectedGame] || '💎'}
+                            </div>
+                            ${product.featured ? '<span class="featured-badge">🔥 HOT DEAL</span>' : ''}
                         </div>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description || ''}</p>
-                        <div class="product-price">
-                            <span class="price-current">$${product.price.toFixed(2)}</span>
-                            ${product.original_price ? `<span class="price-original">$${product.original_price.toFixed(2)}</span>` : ''}
-                            ${savePercent > 0 ? `<span class="price-save">-${savePercent}%</span>` : ''}
+                        <div class="product-content">
+                            <div class="product-game">
+                                <span class="icon">${gameInfo?.icon || '🎮'}</span>
+                                <span class="name">${gameInfo?.name || 'Game'}</span>
+                            </div>
+                            <h3 class="product-name">${product.name}</h3>
+                            <p class="product-description">${product.description || ''}</p>
+                            <div class="product-price">
+                                <span class="price-current">$${product.price.toFixed(2)}</span>
+                                ${product.original_price ? `<span class="price-original">$${product.original_price.toFixed(2)}</span>` : ''}
+                                ${savePercent > 0 ? `<span class="price-save">-${savePercent}%</span>` : ''}
+                            </div>
+                            <button class="btn btn-cyber product-buy" onclick="openPurchase('${product.id}')">
+                                Buy Now
+                            </button>
                         </div>
-                        <button class="btn btn-cyber product-buy" onclick="openPurchase('${product.id}')">
-                            Buy Now
-                        </button>
                     </div>
                 `;
             }).join('');
@@ -1502,8 +1807,8 @@
             const gameInfo = games.find(g => g.id === selectedGame);
             
             document.getElementById('modalProductName').textContent = selectedProduct.name;
+            document.getElementById('modalGameName').textContent = gameInfo?.name || 'Game';
             document.getElementById('modalProductPrice').textContent = `$${selectedProduct.price.toFixed(2)}`;
-            document.querySelector('.modal-product-info .modal-product-name + div').textContent = gameInfo?.name || 'Game';
             
             const gameNeedsServer = ['mlbb', 'freefire'].includes(selectedGame);
             document.getElementById('serverField').style.display = gameNeedsServer ? 'block' : 'none';
@@ -1551,6 +1856,9 @@
                 hideModal();
             }
         });
+
+        // Initialize hero on load
+        window.addEventListener('load', updateHero);
     </script>
 </body>
 </html>
