@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameShop - Instant Game Top-Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#050505">
+    <meta name="description" content="Instant game top-up for Mobile Legends, PUBG, Free Fire. Secure payments, instant delivery.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #050505;
+            --bg-surface: #0A0A0A;
+            --bg-card: #111111;
+            --accent-primary: #FF6B3D;
+            --accent-secondary: #00F0FF;
+            --accent-tertiary: #A855F7;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1A1;
+            --text-muted: #6B6B6B;
+            --border-default: #262626;
+            --border-hover: #404040;
+            --glass-bg: rgba(17, 17, 17, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(2.5rem, 8vw, 5rem); }
+        h2 { font-size: clamp(1.8rem, 5vw, 3rem); }
+        h3 { font-size: clamp(1.2rem, 3vw, 1.5rem); }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, #FF8F6B 100%);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(255, 107, 61, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            padding: 12px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 24px;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 107, 61, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 107, 61, 0.1);
+            border: 1px solid rgba(255, 107, 61, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent-primary);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #A1A1A1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Games Grid */
+        .games-section {
+            padding: 80px 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .games-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .game-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .game-tab:hover,
+        .game-tab.active {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            background: rgba(255, 107, 61, 0.1);
+        }
+
+        .game-tab.active {
+            box-shadow: 0 0 20px rgba(255, 107, 61, 0.3);
+        }
+
+        .game-tab .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card.featured {
+            border-color: rgba(255, 107, 61, 0.5);
+            box-shadow: 0 0 30px rgba(255, 107, 61, 0.2);
+        }
+
+        .product-card.featured::before {
+            content: '🔥 HOT';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent-primary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .product-game {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .product-game .icon {
+            font-size: 1.5rem;
+        }
+
+        .product-game .name {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .product-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .price-current {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .price-original {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .product-buy {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+
+        /* Trust Badges */
+        .trust-section {
+            padding: 60px 24px;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-default);
+            border-bottom: 1px solid var(--border-default);
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .trust-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .trust-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255, 107, 61, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .trust-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .trust-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* How It Works */
+        .how-section {
+            padding: 80px 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 16px;
+        }
+
+        .step-title {
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid var(--border-default);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-default);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-default);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 16px 60px;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .games-section {
+                padding: 60px 16px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="logo">
+                <span>🎮</span> GameShop
+            </a>
+            <ul class="nav-links">
+                <li><a href="#games">Games</a></li>
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="btn-primary" onclick="showModal()">Get Started</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span>⚡</span> Instant Delivery
+        </div>
+        <h1>Top-Up Your Favorite <span>Games</span></h1>
+        <p>Fast, secure, and affordable game top-up for Mobile Legends, PUBG, Free Fire, and more. Instant delivery 24/7.</p>
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="scrollToGames()">Browse Games</button>
+            <button class="btn-secondary" onclick="showModal()">Create Account</button>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section class="trust-section">
+        <div class="trust-grid">
+            <div class="trust-item">
+                <div class="trust-icon">⚡</div>
+                <div class="trust-title">Instant Delivery</div>
+                <div class="trust-desc">Receive your items within seconds</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">🔒</div>
+                <div class="trust-title">Secure Payment</div>
+                <div class="trust-desc">256-bit SSL encryption</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">💰</div>
+                <div class="trust-title">Best Prices</div>
+                <div class="trust-desc">Competitive rates guaranteed</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-icon">🛡️</div>
+                <div class="trust-title">24/7 Support</div>
+                <div class="trust-desc">Always here to help</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games" class="games-section">
+        <div class="section-header">
+            <h2>Select Your Game</h2>
+            <p>Choose from our selection of popular games</p>
+        </div>
+        
+        <div class="games-tabs" id="gamesTabs">
+            <!-- Tabs will be populated by JS -->
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be populated by JS -->
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how" class="how-section">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Top-up in 3 simple steps</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card glass-card">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Select Game</h3>
+                <p class="step-desc">Choose your game and the amount you want to top-up</p>
+            </div>
+            <div class="step-card glass-card">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Enter Details</h3>
+                <p class="step-desc">Provide your player ID and server information</p>
+            </div>
+            <div class="step-card glass-card">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Receive Items</h3>
+                <p class="step-desc">Complete payment and receive items instantly</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">FAQ</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <p class="copyright">© 2026 GameShop. All rights reserved.</p>
+    </footer>
+
+    <!-- Purchase Modal -->
+    <div class="modal-overlay" id="purchaseModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Complete Purchase</h3>
+                <button class="modal-close" onclick="hideModal()">&times;</button>
+            </div>
+            <div id="modalContent">
+                <div class="form-group">
+                    <label>Player ID</label>
+                    <input type="text" id="playerId" placeholder="Enter your Player ID">
+                </div>
+                <div class="form-group" id="serverField">
+                    <label>Server</label>
+                    <input type="text" id="server" placeholder="Enter Server ID (if applicable)">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Your email for receipt">
+                </div>
+                <button class="btn-primary" style="width: 100%;" onclick="completePurchase()">
+                    Proceed to Payment
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_URL = 'http://localhost:3002/api';
+        
+        // Games data
+        const games = [
+            { id: 'mlbb', name: 'Mobile Legends', icon: '🎮', color: '#00F0FF' },
+            { id: 'pubg', name: 'PUBG Mobile', icon: '🔫', color: '#FF6B3D' },
+            { id: 'freefire', name: 'Free Fire', icon: '🔥', color: '#A855F7' },
+            { id: 'valorant', name: 'Valorant', icon: '🎯', color: '#FF4655' },
+        ];
+
+        // State
+        let selectedGame = 'mlbb';
+        let products = [];
+        let selectedProduct = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGameTabs();
+            fetchProducts();
+        });
+
+        // Render game tabs
+        function renderGameTabs() {
+            const container = document.getElementById('gamesTabs');
+            container.innerHTML = games.map(game => `
+                <button class="game-tab ${game.id === selectedGame ? 'active' : ''}" 
+                        onclick="selectGame('${game.id}')"
+                        style="--game-color: ${game.color}">
+                    <span class="icon">${game.icon}</span>
+                    <span>${game.name}</span>
+                </button>
+            `).join('');
+        }
+
+        // Select game
+        function selectGame(gameId) {
+            selectedGame = gameId;
+            renderGameTabs();
+            fetchProducts();
+        }
+
+        // Fetch products from API
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products?game=${selectedGame}`);
+                products = await response.json();
+                renderProducts();
+            } catch (error) {
+                console.error('Failed to fetch products:', error);
+                // Use sample data if API fails
+                products = getSampleProducts(selectedGame);
+                renderProducts();
+            }
+        }
+
+        // Get sample products for fallback
+        function getSampleProducts(game) {
+            const sampleData = {
+                mlbb: [
+                    { id: '1', game: 'mlbb', name: '50 + 5 Diamonds', price: 1.29, original_price: 1.49, description: '50 Diamonds + 5 Bonus', featured: true },
+                    { id: '2', game: 'mlbb', name: '100 + 10 Diamonds', price: 2.49, original_price: 2.99, description: '100 Diamonds + 10 Bonus', featured: false },
+                    { id: '3', game: 'mlbb', name: '500 + 50 Diamonds', price: 9.99, original_price: 12.99, description: '500 Diamonds + 50 Bonus', featured: true },
+                    { id: '4', game: 'mlbb', name: 'Starlight Member', price: 4.99, description: '1 Month Starlight Pass', featured: true },
+                ],
+                pubg: [
+                    { id: '5', game: 'pubg', name: '60 UC', price: 0.99, description: '60 Unknown Cash', featured: false },
+                    { id: '6', game: 'pubg', name: '325 UC', price: 4.99, description: '325 Unknown Cash', featured: true },
+                    { id: '7', game: 'pubg', name: '660 UC', price: 9.99, description: '660 Unknown Cash', featured: false },
+                    { id: '8', game: 'pubg', name: 'Royal Pass', price: 9.99, description: 'Premium Royal Pass', featured: true },
+                ],
+                freefire: [
+                    { id: '9', game: 'freefire', name: '100 Diamonds', price: 0.99, description: '100 Diamonds', featured: false },
+                    { id: '10', game: 'freefire', name: '500 Diamonds', price: 4.99, description: '500 Diamonds', featured: true },
+                ],
+                valorant: [
+                    { id: '11', game: 'valorant', name: '475 VP', price: 4.99, description: '475 Valorant Points', featured: false },
+                    { id: '12', game: 'valorant', name: '1000 VP', price: 9.99, description: '1000 Valorant Points', featured: true },
+                ],
+            };
+            return sampleData[game] || [];
+        }
+
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('productsGrid');
+            const gameInfo = games.find(g => g.id === selectedGame);
+            
+            container.innerHTML = products.map((product, index) => `
+                <div class="product-card glass-card ${product.featured ? 'featured' : ''} animate-fade-in delay-${(index % 4) + 1}">
+                    <div class="product-game">
+                        <span class="icon">${gameInfo?.icon || '🎮'}</span>
+                        <span class="name">${gameInfo?.name || 'Game'}</span>
+                    </div>
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-description">${product.description || ''}</p>
+                    <div class="product-price">
+                        <span class="price-current">$${product.price.toFixed(2)}</span>
+                        ${product.original_price ? `<span class="price-original">$${product.original_price.toFixed(2)}</span>` : ''}
+                    </div>
+                    <button class="btn-primary product-buy" onclick="openPurchase('${product.id}')">
+                        Buy Now
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Open purchase modal
+        function openPurchase(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            document.getElementById('purchaseModal').classList.add('active');
+            
+            // Show/hide server field based on game
+            const gameNeedsServer = ['mlbb', 'freefire'].includes(selectedGame);
+            document.getElementById('serverField').style.display = gameNeedsServer ? 'block' : 'none';
+        }
+
+        // Hide modal
+        function hideModal() {
+            document.getElementById('purchaseModal').classList.remove('active');
+            selectedProduct = null;
+        }
+
+        // Show modal (for create account)
+        function showModal() {
+            document.getElementById('purchaseModal').classList.add('active');
+        }
+
+        // Complete purchase
+        async function completePurchase() {
+            const playerId = document.getElementById('playerId').value;
+            const server = document.getElementById('server').value;
+            const email = document.getElementById('email').value;
+
+            if (!playerId || !email) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Here you would typically call your payment API
+            alert(`Purchase initiated for ${selectedProduct?.name || 'product'}!\n\nPlayer ID: ${playerId}\nServer: ${server || 'N/A'}\n\nYou will receive your items shortly.`);
+            hideModal();
+        }
+
+        // Scroll to games section
+        function scrollToGames() {
+            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close modal on overlay click
+        document.getElementById('purchaseModal').addEventListener('click', (e) => {
+            if (e.target.id === 'purchaseModal') {
+                hideModal();
+            }
+        });
+    </script>
+</body>
+</html>

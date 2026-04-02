@@ -1,0 +1,112 @@
+{
+  "design_system": {
+    "theme": "dark",
+    "colors": {
+      "primary": {
+        "background": "#050505",
+        "surface": "#0A0A0A",
+        "card": "#111111",
+        "cardHover": "#1A1A1A"
+      },
+      "accent": {
+        "primary": "#FF6B3D",
+        "secondary": "#00F0FF",
+        "tertiary": "#A855F7",
+        "success": "#22C55E",
+        "warning": "#F59E0B",
+        "error": "#EF4444"
+      },
+      "text": {
+        "primary": "#FFFFFF",
+        "secondary": "#A1A1A1",
+        "muted": "#6B6B6B",
+        "accent": "#FF6B3D"
+      },
+      "border": {
+        "default": "#262626",
+        "hover": "#404040",
+        "accent": "#FF6B3D"
+      },
+      "glass": {
+        "background": "rgba(17, 17, 17, 0.8)",
+        "border": "rgba(255, 255, 255, 0.1)",
+        "hover": "rgba(255, 255, 255, 0.05)"
+      }
+    },
+    "typography": {
+      "font_family": {
+        "heading": "Rajdhani, sans-serif",
+        "body": "Outfit, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-5xl md:text-7xl font-bold tracking-tight uppercase",
+        "h2": "text-4xl md:text-5xl font-bold tracking-tight uppercase",
+        "h3": "text-2xl md:text-3xl font-semibold tracking-wide",
+        "h4": "text-xl md:text-2xl font-semibold",
+        "body": "text-base md:text-lg leading-relaxed",
+        "caption": "text-sm text-gray-500 font-mono uppercase tracking-widest"
+      }
+    },
+    "spacing": {
+      "section": "py-16 md:py-24",
+      "container": "px-4 md:px-8 lg:px-16",
+      "card": "p-6 md:p-8",
+      "gap": "gap-4 md:gap-6"
+    },
+    "effects": {
+      "glass_morphism": {
+        "background": "backdrop-blur-xl bg-white/5",
+        "border": "border border-white/10",
+        "shadow": "shadow-2xl shadow-black/50"
+      },
+      "neon_glow": {
+        "primary": "shadow-[0_0_30px_rgba(255,107,61,0.4)]",
+        "secondary": "shadow-[0_0_30px_rgba(0,240,255,0.4)]"
+      },
+      "animations": {
+        "hover_lift": "hover:-translate-y-2 transition-all duration-300",
+        "card_hover": "hover:bg-white/10 hover:border-white/20"
+      }
+    },
+    "components": {
+      "button": {
+        "primary": "bg-gradient-to-r from-[#FF6B3D] to-[#FF8F6B] text-white font-bold py-3 px-8 rounded-lg clip-path-button hover:shadow-[0_0_30px_rgba(255,107,61,0.4)] transition-all duration-300",
+        "secondary": "bg-white/10 text-white font-semibold py-3 px-8 rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300",
+        "outline": "bg-transparent text-[#FF6B3D] font-semibold py-3 px-8 rounded-lg border-2 border-[#FF6B3D] hover:bg-[#FF6B3D] hover:text-white transition-all duration-300"
+      },
+      "card": {
+        "default": "bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden",
+        "hover": "hover:bg-white/10 hover:border-white/20 hover:-translate-y-2 transition-all duration-300",
+        "featured": "border-[#FF6B3D]/50 shadow-[0_0_30px_rgba(255,107,61,0.2)]"
+      },
+      "badge": {
+        "primary": "bg-[#FF6B3D]/20 text-[#FF6B3D] px-3 py-1 rounded-full text-sm font-semibold",
+        "secondary": "bg-[#00F0FF]/20 text-[#00F0FF] px-3 py-1 rounded-full text-sm font-semibold",
+        "success": "bg-[#22C55E]/20 text-[#22C55E] px-3 py-1 rounded-full text-sm font-semibold"
+      }
+    },
+    "games": {
+      "mlbb": {
+        "name": "Mobile Legends",
+        "color": "#00F0FF",
+        "icon": "🎮"
+      },
+      "pubg": {
+        "name": "PUBG Mobile",
+        "color": "#FF6B3D",
+        "icon": "🔫"
+      },
+      "freefire": {
+        "name": "Free Fire",
+        "color": "#A855F7",
+        "icon": "🔥"
+      },
+      "valorant": {
+        "name": "Valorant",
+        "color": "#FF4655",
+        "icon": "🎯"
+      }
+    }
+  }
+}
