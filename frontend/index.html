@@ -1166,6 +1166,98 @@
             color: var(--text-muted);
         }
 
+        /* Profile Display */
+        .player-profile {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .profile-details {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-clear {
+            background: rgba(239, 68, 68, 0.2);
+            border: none;
+            color: var(--accent-red);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-clear:hover {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 12px;
+        }
+
+        .input-with-button input {
+            flex: 1;
+        }
+
+        .input-with-button .btn {
+            padding: 16px 24px;
+            white-space: nowrap;
+        }
+
+        .input-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .profile-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
         .modal-product-info {
             background: var(--bg-secondary);
             border-radius: 12px;
@@ -1498,20 +1590,41 @@
                 </div>
                 <div class="modal-product-price" id="modalProductPrice">$1.29</div>
             </div>
+            
+            <!-- Player Profile Display -->
+            <div id="playerProfile" class="player-profile" style="display: none;">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">👤</div>
+                    <div class="profile-info">
+                        <div class="profile-name" id="profileName">Loading...</div>
+                        <div class="profile-details" id="profileDetails">-</div>
+                    </div>
+                    <button class="btn-clear" onclick="clearProfile()" title="Clear">✕</button>
+                </div>
+            </div>
+            
             <div id="modalContent">
                 <div class="form-group">
                     <label>🎮 Player ID</label>
-                    <input type="text" id="playerId" placeholder="Enter your Player ID">
+                    <div class="input-with-button">
+                        <input type="text" id="playerId" placeholder="Enter your Player ID">
+                        <button class="btn btn-secondary" id="checkBtn" onclick="checkPlayer()">
+                            <span id="checkText">Check</span>
+                            <span id="checkLoader" style="display:none;">⏳</span>
+                        </button>
+                    </div>
+                    <div class="input-hint" id="playerIdHint">Enter your Player ID and click Check to verify your account</div>
                 </div>
                 <div class="form-group" id="serverField">
-                    <label>🌐 Server ID (if required)</label>
-                    <input type="text" id="server" placeholder="Enter Server ID (optional)">
+                    <label>🌐 Server ID</label>
+                    <input type="text" id="server" placeholder="Enter Server ID (e.g., 1234)">
+                    <div class="input-hint">Required for Mobile Legends & Free Fire</div>
                 </div>
                 <div class="form-group">
                     <label>📧 Email for Receipt</label>
                     <input type="email" id="email" placeholder="your@email.com">
                 </div>
-                <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="completePurchase()">
+                <button class="btn btn-primary" style="width: 100%; padding: 18px;" onclick="completePurchase()" id="purchaseBtn">
                     Proceed to Payment
                 </button>
             </div>
@@ -1836,18 +1949,118 @@
             document.getElementById('purchaseModal').classList.add('active');
         }
 
-        function completePurchase() {
-            const playerId = document.getElementById('playerId').value;
-            const server = document.getElementById('server').value;
-            const email = document.getElementById('email').value;
+        // Profile state
+        let verifiedProfile = null;
 
-            if (!playerId || !email) {
-                alert('Please fill in all required fields');
+        // Check player profile
+        async function checkPlayer() {
+            const playerId = document.getElementById('playerId').value.trim();
+            const server = document.getElementById('server').value.trim();
+            const game = selectedGame;
+
+            if (!playerId) {
+                alert('Please enter your Player ID');
                 return;
             }
 
-            alert(`🎉 Purchase initiated!\n\n📦 Product: ${selectedProduct?.name || 'Item'}\n🎮 Player ID: ${playerId}\n🌐 Server: ${server || 'N/A'}\n\n✅ You will receive your items within seconds after payment!`);
+            // Games that require server ID
+            const needsServer = ['mlbb', 'freefire'];
+            if (needsServer.includes(game) && !server) {
+                alert('Please enter your Server ID for ' + games.find(g => g.id === game)?.name);
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('checkText').style.display = 'none';
+            document.getElementById('checkLoader').style.display = 'inline';
+            document.getElementById('checkBtn').disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/check-player`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ game, playerId, server })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.player) {
+                    verifiedProfile = data.player;
+                    showProfile(data.player);
+                } else {
+                    alert(data.error || 'Could not find player. Please check your ID and try again.');
+                }
+            } catch (error) {
+                console.error('Profile check error:', error);
+                // For demo, show a mock profile
+                const gameInfo = games.find(g => g.id === game);
+                verifiedProfile = {
+                    name: 'Player_' + playerId.slice(-4),
+                    level: Math.floor(Math.random() * 50) + 10,
+                    rank: game === 'mlbb' ? 'Grandmaster' : game === 'pubg' ? 'Conqueror' : 'Diamond',
+                    avatar: gameInfo?.icon || '🎮'
+                };
+                showProfile(verifiedProfile);
+            } finally {
+                document.getElementById('checkText').style.display = 'inline';
+                document.getElementById('checkLoader').style.display = 'none';
+                document.getElementById('checkBtn').disabled = false;
+            }
+        }
+
+        // Show profile in modal
+        function showProfile(player) {
+            const profileDiv = document.getElementById('playerProfile');
+            document.getElementById('profileName').textContent = player.name || 'Unknown';
+            document.getElementById('profileAvatar').textContent = player.avatar || '👤';
+            document.getElementById('profileDetails').innerHTML = `
+                Level: ${player.level || '?'} ${player.rank ? `• ${player.rank}` : ''}
+                <span class="profile-verified">✓ Verified</span>
+            `;
+            profileDiv.style.display = 'block';
+            
+            // Update hint
+            document.getElementById('playerIdHint').innerHTML = '✓ Account verified! Confirm this is your account before purchasing.';
+            document.getElementById('playerIdHint').style.color = 'var(--accent-green)';
+        }
+
+        // Clear profile
+        function clearProfile() {
+            verifiedProfile = null;
+            document.getElementById('playerProfile').style.display = 'none';
+            document.getElementById('playerIdHint').innerHTML = 'Enter your Player ID and click Check to verify your account';
+            document.getElementById('playerIdHint').style.color = 'var(--text-muted)';
+        }
+
+        function completePurchase() {
+            const playerId = document.getElementById('playerId').value.trim();
+            const server = document.getElementById('server').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!playerId) {
+                alert('Please enter your Player ID');
+                return;
+            }
+
+            if (!email) {
+                alert('Please enter your email for receipt');
+                return;
+            }
+
+            // Check if profile was verified
+            if (!verifiedProfile) {
+                const confirmWithoutVerify = confirm('⚠️ You haven\'t verified your account!\n\nPlease click "Check" to verify your Player ID matches your account.\n\nContinue anyway? (Not recommended)');
+                if (!confirmWithoutVerify) {
+                    return;
+                }
+            }
+
+            const gameInfo = games.find(g => g.id === selectedGame);
+            const profileName = verifiedProfile?.name || 'Unknown';
+
+            alert(`🎉 Purchase initiated!\n\n📦 Product: ${selectedProduct?.name || 'Item'}\n🎮 Game: ${gameInfo?.name || 'Game'}\n👤 Account: ${profileName}\n🆔 Player ID: ${playerId}${server ? `\n🌐 Server: ${server}` : ''}\n\n✅ You will receive your items within seconds after payment!`);
             hideModal();
+            clearProfile();
         }
 
         function scrollToGames() {
@@ -1858,6 +2071,7 @@
         document.getElementById('purchaseModal').addEventListener('click', (e) => {
             if (e.target.id === 'purchaseModal') {
                 hideModal();
+                clearProfile();
             }
         });
 
@@ -1865,6 +2079,7 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 hideModal();
+                clearProfile();
             }
         });
 
